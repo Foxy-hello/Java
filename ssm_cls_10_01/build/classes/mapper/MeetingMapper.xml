@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bawei.dao.MeetingDao">
+
+	<!-- 查询会议信息 -->
+	<select id="findMeeting" parameterType="Meeting" resultType="Meeting">
+		select 
+		id,meetingName,startTime,endTime,cityId,state 
+		from meeting
+		<where>
+			<if test="id!=null and id>0">
+				and id = #{id}
+			</if>
+			<if test="meetingName!=null and meetingName!=''">
+				and meetingName like concat('%',#{meetingName},'%')
+			</if>
+			<if test="state!=null and state>=0">
+				and state=#{state}
+			</if>
+			<if test="startTime!=null and startTime!=''">
+				and startTime>=#{startTime}
+			</if>
+			<if test="endTime!=null and endTime!=''">
+				and endTime&lt;=#{endTime}
+			</if>
+		</where>
+	</select>
+	<select id="findMeetingByGuestId" parameterType="HashMap" resultType="Meeting">
+		select * from meeting m
+		join guest_meeting gm on gm.mid=m.id
+		where gm.gid=#{gid}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
