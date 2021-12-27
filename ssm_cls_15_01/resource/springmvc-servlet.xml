@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+      <!-- 扫描包 -->  
+      <context:component-scan base-package="com.bawei" use-default-filters="false">
+      		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+      </context:component-scan>
+      
+      <!-- 配置annotation-driven，并使用FastJson -->
+	  <mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=utf-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+      
+     <!--释放静态资源  -->
+    <mvc:default-servlet-handler/>
+    <!-- 对静态资源文件的访问 --><!-- SpringMVC提供<mvc:resources>来设置静态资源 -->
+    <mvc:resources mapping="/jsLibrary/**" location="/jsLibrary/"/>
+    <mvc:resources mapping="/jsLibrary/raty/**" location="/jsLibrary/raty/"/>
+    <mvc:resources mapping="/jsLibrary/raty/fonts/**" location="/jsLibrary/raty/fonts/"/>
+    <mvc:resources mapping="/jsLibrary/raty/images/**" location="/jsLibrary/raty/images/"/>
+    <mvc:resources mapping="/jsLibrary/raty/zebra/css/default/**" location="/jsLibrary/raty/zebra/css/default/"/>
+    <mvc:resources mapping="/jsLibrary/raty/zebra/javascript/**" location="/jsLibrary/raty/zebra/javascript/"/>
+    <mvc:resources mapping="/themes/bootstrap/css/**" location="/themes/bootstrap/css/"/>
+    <mvc:resources mapping="/themes/bootstrap/fonts/**" location="/themes/bootstrap/fonts/"/>
+    <mvc:resources mapping="/themes/bootstrap/js/**" location="/themes/bootstrap/js/"/>
+    <mvc:resources mapping="/themes/default/**" location="/themes/default/"/>
+    <mvc:resources mapping="/themes/default/images/**" location="/themes/default/images/"/>
+    
+      <!-- 视图解析器 -->
+      <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      	 <property name="prefix" value="/"></property>
+      	 <property name="suffix" value=".jsp"></property>
+      </bean>
+      
+</beans>        
