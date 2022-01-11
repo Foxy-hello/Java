@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+	 <!-- 配置Person对象 
+	  bean标签:指定需要被spring容器管理的对象.
+      id属性: 指定一个用来访问的唯一名称.
+ 	  class属性:指定被管理对象的完整类名.	
+      name属性:指定多个别名，名字之间使用逗号、分号或空格进行分隔.
+	 -->
+	 <!-- 案例一 
+	 <bean id="onePerson" class="com.bawei.pojo.Person"></bean>
+	 -->
+	
+	<!-- 案例二 -->
+	<bean id="onePerson" class="com.bawei.pojo.Person">
+		 <!-- 配置name属性
+		 property标签:配置bean对象属性，调用属性set方法设值.
+     	 name属性:指定属性名.	
+         value:指定属性值.-->
+	     <property name="name" value="张三"></property>
+	</bean>
+</beans>
