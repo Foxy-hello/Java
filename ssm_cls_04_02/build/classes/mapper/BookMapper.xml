@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bawei.dao.BookDao">
+	<!-- if标签应用 -->
+	<select id="selectByconditionif" parameterType="Book" resultType="Book" >
+		SELECT * FROM book WHERE 1 = 1
+		 <if test="bName != null">
+				AND bName = #{bName}
+			</if>
+			<if test="bAuthor != null">
+				AND bAuthor = #{bAuthor}
+			</if>
+			  <if test="bPublisher != null">
+				AND bPublisher = #{bPublisher}
+			</if>  
+	</select>
+	<!-- 条件查询 where+if   ‘’中间一个空格-->
+	<select id="selectBycondition" parameterType="Book" resultType="Book" >
+		SELECT * FROM book
+		<where>
+		 <if test="bName != null">
+				AND bName like '%${bName }%'
+			</if>
+			<if test="bAuthor != null">
+				AND bAuthor = '${bAuthor}'
+			</if>
+			  <if test="bPublisher != null">
+				AND bPublisher = '${bPublisher}'
+			</if>  
+		</where>
+	</select>
+	<!-- 条件查询 where+if   ‘’中间一个空格-->
+	<select id="selectBycondition2" parameterType="Book" resultType="Book" >
+		SELECT * FROM book
+		<where>
+		 <if test="bName != null">
+				AND bName like concat('%',#{bName},'%')
+			</if>
+			<if test="bAuthor != null">
+				AND bAuthor = #{bAuthor}
+			</if>
+			  <if test="bPublisher != null">
+				AND bPublisher = #{bPublisher}
+			</if>  
+		</where>
+	</select>
+	<!-- 条件查询 trim+if -->
+	<select id="searchBook1" parameterType="Book" resultType="Book">
+		select * from book
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="bName != null and bName.length()>0"> AND bName=#{bName}</if>
+			<if test="bAuthor != null and bAuthor.length()>0"> AND bAuthor=#{bAuthor}</if>
+			<if test="bPublisher != null and bPublisher.length()>0"> AND bPublisher=#{bPublisher}</if>
+		</trim>
+	</select>
+	<!-- 修改图书 if+set -->
+	<update id="updateBook" parameterType="Book">
+		update book
+		<set>
+			<if test="bName != null and bName != ''"> bName=#{bName},</if>
+			<if test="bAuthor != null and bAuthor != ''"> bAuthor=#{bAuthor},</if>
+			<if test="bPubdate != null and bPubdate != ''"> bPubdate=#{bPubdate},</if>
+			<if test="bPrice != null and bPrice != ''"> bPrice=#{bPrice},</if>
+			<if test="bPublisher != null and bPublisher != ''"> bPublisher=#{bPublisher},</if>
+			<if test="bDetail != null and bDetail != ''"> bDetail=#{bDetail},</if>
+		</set>
+		where bId = #{bId}
+	</update>
+	<!-- 修改图书 if+set -->
+	<update id="updateBook1" parameterType="Book">
+		update book
+		<trim prefix="SET" suffixOverrides="," suffix="WHERE bId = #{bId}">
+			<if test="bName != null and bName != ''"> bName=#{bName},</if>
+			<if test="bAuthor != null and bAuthor != ''"> bAuthor=#{bAuthor},</if>
+			<if test="bPubdate != null and bPubdate != ''"> bPubdate=#{bPubdate},</if>
+			<if test="bPrice != null and bPrice != ''"> bPrice=#{bPrice},</if>
+			<if test="bPublisher != null and bPublisher != ''"> bPublisher=#{bPublisher},</if>
+			<if test="bDetail != null and bDetail != ''"> bDetail=#{bDetail},</if>
+		</trim>
+	</update>
+	<!-- 批量插入 -->
+	<insert id="insertBookBatch" parameterType="Book">
+	INSERT INTO book(bName,bAuthor,bPubdate,bPrice,bPublisher,bDetail)VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.bName},#{item.bAuthor},#{item.bPubdate},#{item.bPrice},#{item.bPublisher},#{item.bDetail})
+		</foreach>
+	</insert>
+	<!-- 批量修改 -->
+	<update id="updateBookBatch" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index"
+			separator=";">
+			update book
+			<set>
+				bName=#{item.bName},
+				bAuthor=#{item.bAuthor},
+				bPubdate=#{item.bPubdate},
+				bPrice=#{item.bPrice},
+				bPublisher=#{item.bPublisher},
+				bDetail=#{item.bDetail},
+			</set>
+			where bId=#{item.bId}
+		</foreach>
+	</update>
+	<!-- 批量删除 -->
+	<delete id="deleteBookBatch" parameterType="int">
+		delete from book where bId IN
+		<foreach collection="array" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- foreach 集合 -->
+	<select id="selectByIdsList"  resultType="Book">
+		SELECT * FROM book where bId in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- foreach 数组 -->
+	<select id="selectByIdsArray"  resultType="Book">
+		SELECT * FROM book where bId in
+		<if test="array!=null and array.length>0">
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		</if>
+	</select>
+ 
+	<!-- foreach Map -->
+	<select id="selectByIdsMap"  parameterType="java.util.HashMap" resultType="Book">
+		SELECT * FROM book where bId in
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- choosetest -->
+	<select id="selectByIdAndName"  resultType="Book" >
+   		SELECT * FROM  book  WHERE 1=1
+		<choose>
+			<when  test ="bId != null and bId > 0 "> and  bid= #{bId}</when >
+			<when  test ="bName != null  and  bName !='' "> and  bName =  #{bName}</when>
+			<otherwise>
+				and  1 = 2
+			</otherwise>
+		</choose>
+	</select>
+</mapper>
