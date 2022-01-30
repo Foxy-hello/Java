@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bawei.dao.MeetingDao">
+	<!-- 新增会议 -->
+	<insert id="addMeeting" parameterType="Meeting">
+		INSERT INTO meeting(meetingName,startTime,endTime,provinceId,cityId,countyId,address,contact,telephone,mobilephone,introduce,image,state) 
+		VALUES(#{meetingName},#{startTime},#{endTime},#{province.id},#{city.id},#{county.id},#{address},#{contact},#{telephone},#{mobilephone},#{introduce},#{image},#{state})
+	</insert>
+</mapper>
