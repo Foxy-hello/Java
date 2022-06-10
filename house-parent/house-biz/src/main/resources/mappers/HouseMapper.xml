@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bobo.mapper.HouseMapper">
+
+
+    <!--增加楼盘表并返回自增住建id-->
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into t_house(id, name, picurl, pid, cid, aid, area, address)
+        values (null, #{name}, #{picurl}, #{pid}, #{cid}, #{aid}, #{area}, #{address})
+
+    </insert>
+
+
+    <insert id="addHouseShangQuan">
+        insert into t_house_shangquan(hid,sid)
+        values
+        <!--(1,2),(1,3)-->
+        <foreach collection="sids" item="sid" separator=",">
+            (#{id},#{sid})
+        </foreach>
+
+    </insert>
+    <select id="getCity" resultType="com.bobo.pojo.City">
+        select *
+        from t_city
+        where pid = #{pid}
+    </select>
+    <select id="getShangQuan" resultType="com.bobo.pojo.Shangquan" statementType="CALLABLE">
+        call getShangQuang(#{cid})
+    </select>
+    <select id="list" resultType="com.bobo.pojo.House">
+        select h.id, h.name, h.picurl, CONCAT(c1.name, c2.name, c3.name, h.address) address
+        from t_house h
+                 LEFT JOIN t_city c1 on h.pid = c1.id
+                 LEFT JOIN t_city c2 on h.cid = c2.id
+                 LEFT JOIN t_city c3 on h.aid = c3.id
+
+
+
+<where>
+    <if test="name!=null and name!=''">
+        h.name like "%"#{name} "%"
+       or
+        h.address like "%"#{name} "%"
+    </if>
+
+     <if test="pid!=null">
+        and   h.pid=#{pid}
+     </if>
+    <if test="cid!=null">
+        and   h.cid=#{cid}
+    </if>
+</where>
+    </select>
+    <select id="getTJ" resultType="com.bobo.pojo.House" statementType="CALLABLE">
+
+        call getTJ(#{cid})
+    </select>
+</mapper>

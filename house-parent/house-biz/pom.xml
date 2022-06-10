@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>house-parent</artifactId>
+    <groupId>com.bobo</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>house-biz</artifactId>
+  <packaging>war</packaging>
+
+  <!-- jar依赖 -->
+  <dependencies>
+    <dependency>
+      <groupId>com.bobo</groupId>
+      <artifactId>house-common</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <!-- 配置jetty -->
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.4.28.v20200408</version>
+        <configuration>
+          <httpConnector>
+            <!-- 端口号 -->
+            <port>80</port>
+            <!-- 访问路径 -->
+            <host>localhost</host>
+          </httpConnector>
+          <!--监听整个项目，如果项目源码改变，1秒后 jetty自动重启 -->
+          <scanIntervalSeconds>1</scanIntervalSeconds>
+
+          <!-- 配置jetty虚拟路径 -->
+          <contextHandlers>
+            <jettyWebAppContext>
+              <!--虚拟路径 访问路径 -->
+              <contextPath>/pic/</contextPath>
+              <!-- 物理路径 -->
+              <resourceBase>d:/pic/</resourceBase>
+            </jettyWebAppContext>
+          </contextHandlers>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
