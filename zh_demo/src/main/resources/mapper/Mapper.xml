@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zh.dao.UserDao">
+    <insert id="upd" statementType="CALLABLE">
+        {call Test(#{sid},#{hid},#{hid})}
+    </insert>
+
+    <select id="login" resultType="com.zh.bean.User">
+        select *
+        from user
+        where uname = #{uname}
+          and pwd = #{pwd}
+    </select>
+    <select id="findAll" resultType="com.zh.bean.Student">
+        select dormitory.*, house.hname, group_concat(sname) as sname
+        from dormitory
+                 left join mi on dormitory.did = mi.did
+                 left join house on house.hid = mi.hid
+                 left join student on student.sid = mi.sid
+        group by dormitory.did
+    </select>
+    <select id="getEchartsNum" resultType="com.zh.bean.Echarts">
+        select house.hname, count(mi.sid) num
+        from house
+                 left join mi on house.hid = mi.hid
+        group by house.hid
+    </select>
+    <select id="getStu" resultType="com.zh.bean.Stu">
+        select * from student
+    </select>
+
+    <select id="getLou" resultType="com.zh.bean.Lou">
+        select * from house
+    </select>
+    <select id="getDormitory" resultType="com.zh.bean.Dormitory">
+        select * from dormitory
+    </select>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/aop   http://www.springframework.org/schema/aop/spring-aop.xsd   
+	 http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd   
+	 http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd   
+	 http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	 
+	<context:component-scan base-package="com.zh.controller"></context:component-scan>
+	<aop:config>
+		<!-- 暗号 -->
+		<aop:pointcut expression="execution(*  com.zh.controller.*.*(..))" id="myPC"/>
+		<aop:advisor advice-ref="myAdvice" pointcut-ref="myPC"/>
+		<aop:aspect ref="myAop">
+			<aop:around method="MyAround" pointcut-ref="myPC"></aop:around>
+		</aop:aspect>
+	</aop:config>
+	<!-- 视图解析器 -->
+	<bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	 <!-- 注解驱动   使用ajax时导入  -->
+	 <mvc:annotation-driven></mvc:annotation-driven>
+
+
+	<!--配置支持上传文件的CommonsMultipartResolver   -->
+	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 限制总的上传文件大小(50M) -->
+		<property name="maxUploadSize" value="52428800" ></property>
+		<!--限制每个上传文件的大小(5M -->
+		<property name="maxUploadSizePerFile" value="5242880" ></property>
+		<!--防止文件名中文乱码 -->
+		<property name="defaultEncoding" value="UTF-8" ></property>
+	</bean>
+
+
+<!--	<mvc:interceptors>-->
+<!--		<mvc:interceptor>-->
+<!--			<mvc:mapping path="/**"/>-->
+<!--&lt;!&ndash;			<mvc:exclude-mapping path="/vue"/>&ndash;&gt;-->
+<!--			<bean class="com.zh.interceptor.LoginInterceptor"></bean>-->
+<!--		</mvc:interceptor>-->
+
+<!--	</mvc:interceptors>-->
+
+
+
+</beans>

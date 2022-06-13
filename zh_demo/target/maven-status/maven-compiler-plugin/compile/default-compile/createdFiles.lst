@@ -1,0 +1,14 @@
+com\zh\utils\GitUtils.class
+com\zh\controller\UserController.class
+com\zh\dao\UserDao.class
+com\zh\service\impl\UserServiceImpl.class
+com\zh\bean\Student.class
+com\zh\bean\User.class
+com\zh\bean\Stu.class
+com\zh\bean\Mi.class
+com\zh\bean\Echarts.class
+com\zh\bean\Dormitory.class
+com\zh\service\UserService.class
+com\zh\bean\Lou.class
+com\zh\bean\GitBean.class
+com\zh\Aop\MyAop.class
